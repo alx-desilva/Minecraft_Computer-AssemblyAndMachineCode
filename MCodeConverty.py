@@ -69,13 +69,12 @@ def main():
 
 
 def select_file(files):
-    files = files
     file_input = input("Please Select a valid File:")
     for file in files:
         if file_input == file:
             return(file)
     else:
-        select_file(files)
+        main()
 
 
 def convert_script(file):
@@ -84,9 +83,7 @@ def convert_script(file):
         for line in f:
             cur_line_binary = ""
             line_code_list = line.split()
-            print(line_code_list)
             for code in line_code_list:
-                print(code)
                 for key, value in commands.items():
                     if code == key:
                         cur_line_binary += str(value)
@@ -109,9 +106,11 @@ def check_file_type_mcmc(file):
 def export_to_file(binary_list,file_name):
     filen_noextention = file_name.split('.')[0]
     try:
+        while len(binary_list) < 256:
+            binary_list.append("0000000000000000")
+
         with open(filen_noextention+ ".mcbi","w") as f:
-            for line in binary_list:
-                f.write(str(line)+ "\n")
+            f.write("\n".join(str(line) for line in binary_list))
             f.close()
             print(f"Successfully exported binary to: {filen_noextention}.mcbi")
 

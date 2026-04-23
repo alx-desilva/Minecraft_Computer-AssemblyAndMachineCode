@@ -34,6 +34,8 @@ def main():
         print("No runnable files detected! Please put code files inside current dirrectory, with the .mcbi tag.")
 
 
+
+
 def select_file(files):
     files = files
     file_input = input("Please Select a valid File:")
@@ -41,7 +43,7 @@ def select_file(files):
         if file_input == file:
             return file
     else:
-        select_file(files)
+        main()
 
 
 def check_file_type_mcbi(file):
@@ -52,24 +54,6 @@ def check_file_type_mcbi(file):
         return(True)
     else:
         return(False)
-
-
-def make_schemz(schem_file):
-    schem = mcschematic.MCSchematic()
-    binary_list = read_mcbi_file(schem_file)
-    yoffset = 0
-
-    for set in binary_list:
-        for bit in set:
-            if bit == "1":
-                binary_on(0,yoffset,0,schem)
-            elif bit == "0":
-                binary_off(0,yoffset, 0,schem)
-            yoffset -= 3
-        yoffset = 0
-
-    return schem
-
 
 def read_mcbi_file(file):
     converted_binary_list = []
@@ -82,9 +66,57 @@ def read_mcbi_file(file):
 
 
 
+
+def make_schemz(schem_file):
+    schem = mcschematic.MCSchematic()
+    binary_list = read_mcbi_file(schem_file)
+    lineNum = 0
+    TotalLineNum = 0
+    xloc = 0
+    zloc = 0
+    for binary_line in binary_list:
+        if lineNum == 32:
+            lineNum = 0
+            zloc = 0
+            xloc -= 6
+        TotalLineNum += 1
+        print(f"Current line: {TotalLineNum}")
+        create_line(schem,binary_line,xloc,zloc)
+        lineNum += 1
+        zloc -= 2
+    
+    return schem
+
+
+def create_line(schem_file,binary_line,xloc,zloc):
+    mid = len(binary_line) // 2
+    firstEightBits = binary_line[:mid]
+    secondEightBits = binary_line[mid:]
+
+    ydif = -1
+
+    for bit in firstEightBits:
+        if bit == "1":
+            binary_on(xloc,ydif,zloc, schem_file)
+        if bit == "0":
+            binary_off(xloc,ydif,zloc, schem_file)
+        ydif -= 2
+    ydif -=2
+    for bit in secondEightBits:
+        if bit == "1":
+            binary_on(xloc,ydif,zloc, schem_file)
+        if bit == "0":
+            binary_off(xloc,ydif,zloc,schem_file)
+        ydif -= 2
+
+        
+
+
+
+
 def binary_on(x,y,z,schem):
     schem.setBlock((x,y,z),"minecraft:magenta_wool")
-    schem.setBlock((x,y+1,z),"minecraft:repeater")
+    schem.setBlock((x,y+1,z),"minecraft:repeater[facing=east]")
 
 
 def binary_off(x,y,z,schem):
@@ -93,11 +125,10 @@ def binary_off(x,y,z,schem):
 
 def save_schemz(schem_name,schem_file):
     try:
-        schem_file.save("/Users/alexdesilva/Library/Application Support/minecraft/config/worldedit/schematics",schem_name,mcschematic.Version.JE_1_18_2 )
+        schem_file.save(".",schem_name,mcschematic.Version.JE_1_18_2 )
         print("successfully saved in schem folder!")
-    except error:
+    except:
         print("there was an error with saving your schematic")
-        print(error)
 
 
 main()
