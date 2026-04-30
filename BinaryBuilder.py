@@ -29,21 +29,16 @@ def main():
         print(mcbifiles)
         selected_file = select_file(mcbifiles)
         schem = make_schemz(selected_file)
-        save_schemz("instMemtest",schem)
+        save_schemz(str(selected_file),schem)
     else:
         print("No runnable files detected! Please put code files inside current dirrectory, with the .mcbi tag.")
 
 
 
-
 def select_file(files):
-    files = files
-    file_input = input("Please Select a valid File:")
-    for file in files:
-        if file_input == file:
-            return file
-    else:
-        main()
+    while (file_input := input('Select a file:')) not in files:
+        print('Not a valid .mcbi file')
+    return file_input
 
 
 def check_file_type_mcbi(file):
@@ -58,9 +53,7 @@ def check_file_type_mcbi(file):
 def read_mcbi_file(file):
     converted_binary_list = []
     with open(file,"r") as f:
-        for l in f:
-            converted_binary_list.append(str(l))
-    return converted_binary_list
+        return f.readlines()
 
 
 
@@ -126,7 +119,8 @@ def binary_off(x,y,z,schem):
 
 def save_schemz(schem_name,schem_file):
     try:
-        schem_file.save(".",schem_name,mcschematic.Version.JE_1_18_2 )
+        filen_noextention = schem_name.split('.')[0]
+        schem_file.save(".",filen_noextention,mcschematic.Version.JE_1_18_2 )
         print("successfully saved in schem folder!")
     except:
         print("there was an error with saving your schematic")

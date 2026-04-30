@@ -83,11 +83,18 @@ def convert_script(file):
         binary_line_list = []
         for line in f:
             cur_line_binary = ""
-            line_code_list = line.split()
+            line_code_list = line.split() #gets each command
+            print(line_code_list)
             for code in line_code_list:
                 for key, value in commands.items():
                     if code == key:
                         cur_line_binary += str(value)
+                try:
+                    if isinstance(int(code),int):
+                        cur_line_binary += str(code)
+                except:
+                    pass
+
             binary_line_list.append(cur_line_binary)
         f.close()
     
