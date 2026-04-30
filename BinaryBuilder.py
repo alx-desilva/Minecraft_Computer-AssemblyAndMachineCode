@@ -121,6 +121,7 @@ def binary_on(x,y,z,schem):
 
 def binary_off(x,y,z,schem):
     schem.setBlock((x,y,z),"minecraft:magenta_wool")
+    schem.setBlock((x,y+1,z),"minecraft:structure_void")
 
 
 def save_schemz(schem_name,schem_file):
