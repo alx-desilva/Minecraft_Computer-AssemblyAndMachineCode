@@ -16,9 +16,9 @@ commands = {
     "XOR": "0111",
     "HLT": "1000",
     "JMP": "1001",
-    "": "1010",
-    "LOD": "1011",
-    "STR": "1100",
+    "SCR": "1010",
+    "": "1011",
+    "": "1100",
     "": "1101",
     "": "1110",
     "": "1111",
@@ -84,16 +84,25 @@ def convert_script(file):
         for line in f:
             cur_line_binary = ""
             line_code_list = line.split() #gets each command
-            print(line_code_list)
-            for code in line_code_list:
-                for key, value in commands.items():
-                    if code == key:
-                        cur_line_binary += str(value)
-                try:
-                    if isinstance(int(code),int):
-                        cur_line_binary += str(code)
-                except:
-                    pass
+            opcode = line_code_list[0]
+            print(opcode)
+            if opcode == "NOP":
+                cur_line_binary = "0000000000000000"
+            elif opcode == "SCR":
+                reg = commands.get(line_code_list[1],'0000')
+                cur_line_binary = commands["SCR"] + reg + "0000" + "0000"
+            elif opcode == "JMP":
+                cur_line_binary = commands["JMP"] + line_code_list[1] + "0000"
+            else:
+                for code in line_code_list:
+                    for key, value in commands.items():
+                        if code == key:
+                            cur_line_binary += str(value)
+                    try:
+                        if isinstance(int(code),int):
+                            cur_line_binary += str(code)
+                    except:
+                        pass
 
             binary_line_list.append(cur_line_binary)
         f.close()

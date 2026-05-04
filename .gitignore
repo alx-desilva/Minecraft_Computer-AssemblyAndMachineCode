@@ -1,8 +1,4 @@
-SingleLinetest.mcmc
-SingleLinetest.mcbi
-instMemtest.schem
-BasicAddition.mcbi
-BasicAddition.mcmc
-ResetFirst4Reg.mcbi
-ResetFirst4Reg.mcmc
-.gitignore
+rachel.mcbi
+rachel.mcmc
+rachel.schem
+
