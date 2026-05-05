@@ -90,9 +90,16 @@ def convert_script(file):
                 cur_line_binary = "0000000000000000"
             elif opcode == "SCR":
                 reg = commands.get(line_code_list[1],'0000')
-                cur_line_binary = commands["SCR"] + reg + "0000" + "0000"
+                cur_line_binary = commands["SCR"] + "0000" + reg + "0000"
             elif opcode == "JMP":
                 cur_line_binary = commands["JMP"] + line_code_list[1] + "0000"
+            elif opcode =="HLT":
+                cur_line_binary = commands["HLT"] + "000000000000"
+            elif opcode == "SUB":
+                reg1 = commands.get(line_code_list[1],'0000')
+                reg2 = commands.get(line_code_list[2],'0000')
+                reg3 = commands.get(line_code_list[3],'0000')
+                cur_line_binary = commands["SUB"] + reg2 + reg1 + reg3
             else:
                 for code in line_code_list:
                     for key, value in commands.items():

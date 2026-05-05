@@ -2,3 +2,9 @@ rachel.mcbi
 rachel.mcmc
 rachel.schem
 
+testing.mcbi
+testing.mcmc
+testing.schem
+
+.gitignore
+testing.mcbi
